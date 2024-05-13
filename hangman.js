@@ -3,6 +3,7 @@ const words = ['cherry', 'blueberry', 'melon', 'peach', 'watermelon'];
 let answer = words[Math.floor(Math.random() * words.length)];
 let selectedLetters = [];
 let count = 0;
+let progress = false;
 
 function setup() {
     document.getElementById('word').innerHTML = "<p>Guess this word: " + "_ ".repeat(answer.length) + "</p>";
@@ -14,6 +15,19 @@ function setup() {
         document.getElementById("letters").appendChild(btn);
     }
     draw();
+
+    document.addEventListener('keydown', (event) => {
+        const char = event.key.toLowerCase(); // to small letter
+        if (char.length === 1 && char >= 'a' && char <= 'z') { // check alphabet
+            const buttons = document.getElementsByClassName('button');
+            for (let btn of buttons) {
+                if (btn.innerHTML === char) {
+                    guess(char, btn); // call 'guess'
+                    break;
+                }
+            }
+        }
+    });
 }
 
 function guess(char, button) {
@@ -30,12 +44,12 @@ function guess(char, button) {
         count++;
         draw();
     }
-
-    checkEnd();
+    // if it doesn't exist, alert function is executed first before print last correct letter
+    setTimeout(checkEnd, 100); 
 }
 
 
-function getGuessedWord() {
+function getGuessedWord() { // _ -> correct letter
     return answer.split('').map(letter => (selectedLetters.includes(letter) ? letter : "_ ")).join('');
 }
 
@@ -100,10 +114,15 @@ function draw() {
 
 function checkEnd() {
     if (count >= 7) {
-        alert("You lost!");
-    } else if (!getGuessedWord().includes("_")) {
-        alert("You won!");
+        swal("You lost", "Try again", "error"); // custom alert
+        return;
+    }
+
+    if (!getGuessedWord().includes("_")) {
+        swal("You won!", "Congratulations", "success");
+        return; 
     }
 }
+
 
 window.onload = setup;
