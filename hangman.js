@@ -16,18 +16,22 @@ function setup() {
     }
     draw();
 
-    document.addEventListener('keydown', (event) => {
-        const char = event.key.toLowerCase(); // to small letter
-        if (char.length === 1 && char >= 'a' && char <= 'z') { // check alphabet
-            const buttons = document.getElementsByClassName('button');
-            for (let btn of buttons) {
-                if (btn.innerHTML === char) {
-                    guess(char, btn); // call 'guess'
-                    break;
+        // keyboard event
+        document.addEventListener('keydown', (event) => {
+            const char = event.key.toLowerCase(); // Capital to smaller
+            if (char.length === 1 && char >= 'a' && char <= 'z') { // check alphabet
+                const buttons = document.getElementsByClassName('button');
+                for (let btn of buttons) {
+                    if (btn.innerHTML === char) {
+                        guess(char, btn); // call guess
+                        break;
+                    }
                 }
             }
-        }
-    });
+        });
+    
+    
+
 }
 
 function guess(char, button) {
